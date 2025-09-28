@@ -6,6 +6,7 @@ import {roleAPI} from "service/RoleService";
 import {profileAPI} from "service/ProfileService";
 import {cityAPI} from "service/CityService";
 import {hotelAPI} from "service/HotelService";
+import {hotelInspectionRequestAPI} from "service/HotelInspectionRequestService";
 
 export type RootStateType = {
     currentUser: CurrentUserModelStateType
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
     [profileAPI.reducerPath]: profileAPI.reducer,
     [cityAPI.reducerPath]: cityAPI.reducer,
     [hotelAPI.reducerPath]: hotelAPI.reducer,
+    [hotelInspectionRequestAPI.reducerPath]: hotelInspectionRequestAPI.reducer,
 })
 
 export const setupStore = () => {
@@ -32,6 +34,7 @@ export const setupStore = () => {
                 .concat(profileAPI.middleware)
                 .concat(cityAPI.middleware)
                 .concat(hotelAPI.middleware)
+                .concat(hotelInspectionRequestAPI.middleware)
     })
 }
 

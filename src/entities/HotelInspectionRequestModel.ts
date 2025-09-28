@@ -1,7 +1,7 @@
 import {HotelModel} from "entities/HotelModel";
 
 export type HotelInspectionRequestModel = {
-    id: number;
+    id: number | null;
     hotel: HotelModel;
     startDate: number;
     status: string;

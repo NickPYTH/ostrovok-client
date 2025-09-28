@@ -22,6 +22,10 @@ const items: MenuItem[] = [
         key: 'hotels',
     },
     {
+        label: 'Инспекции отелей',
+        key: 'hotelInspectionRequests',
+    },
+    {
         label: 'Выйти',
         key: 'logout',
         icon: <LogoutOutlined />,
@@ -113,6 +117,7 @@ export const Navbar = () => {
         if (e.key == 'users') navigate('/users');
         if (e.key == 'profiles') navigate('/profiles');
         if (e.key == 'hotels') navigate('/hotels');
+        if (e.key == 'hotelInspectionRequests') navigate('/hotelInspectionRequests');
         if (e.key == 'logout') {
             localStorage.clear();
             navigate('/login');

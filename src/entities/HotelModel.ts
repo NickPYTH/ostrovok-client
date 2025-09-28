@@ -1,7 +1,7 @@
 import {CityModel} from "entities/CityModel";
 
 export type HotelModel = {
-    id: number;
+    id: number | null;
     name: string;
     description: string;
     action: string;

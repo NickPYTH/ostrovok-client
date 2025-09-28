@@ -95,7 +95,7 @@ export const ProfileModal = (props: ModalProps) => {
             showErrorNotification("topRight", "Ошибка получения ролей");
     }, [isUsersError]);
     useEffect(() => {
-        if (isUsersError)
+        if (isCitiesError)
             showErrorNotification("topRight", "Ошибка получения городов");
     }, [isCitiesError]);
     // -----
@@ -167,11 +167,11 @@ export const ProfileModal = (props: ModalProps) => {
                 <Flex align={"center"}>
                     <div style={{width: 180}}>Город</div>
                     <Select
-                        loading={isUsersLoading}
-                        value={userId}
+                        loading={isCitiesLoading}
+                        value={cityId}
                         placeholder={"Выберите город"}
                         style={{width: '100%'}}
-                        onChange={(e) => setUserId(e)}
+                        onChange={(e) => setCityId(e)}
                         options={cities?.map((city: CityModel) => ({value: city.id, label: city.name}))}
                     />
                 </Flex>

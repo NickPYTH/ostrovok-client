@@ -137,11 +137,11 @@ export const InspectionReportModal = (props: ModalProps) => {
         >
             <Flex gap={'small'} vertical={true}>
                 <Flex align={"center"}>
-                    <div style={{width: 180}}>Заявка тайного гостя</div>
+                    <div style={{width: 330}}>Заявка тайного гостя</div>
                     <Select
                         loading={isGetGuestRequestsLoading}
                         value={guestRequestId}
-                        placeholder={"Выберите отель"}
+                        placeholder={"Выберите заявку тайного гостя"}
                         style={{width: '100%'}}
                         onChange={(e) => setGuestRequestId(e)}
                         options={guestRequests?.map((gr: GuestRequestModel) => ({value: gr.id, label: `${gr.id} ${gr.guest.username} ${gr.hotelInspectionRequest.hotel.name}`}))}
@@ -149,51 +149,51 @@ export const InspectionReportModal = (props: ModalProps) => {
                 </Flex>
                 <Divider />
                 <Flex align={"center"}>
-                    <div style={{width: 180}}>Оцените чистоту в отеле</div>
+                    <div style={{width: 330}}>Оцените чистоту в отеле</div>
                     <Rate allowHalf value={cleannessRating} onChange={(rating) => setCleannessRating(rating)}/>
                 </Flex>
                 <Flex align={"center"}>
-                    <div style={{width: 180}}>Оставьте более подробный отзыв о чистоте в отеле</div>
+                    <div style={{width: 330}}>Оставьте более подробный отзыв о чистоте в отеле</div>
                     <TextArea value={cleannessComment} onChange={(e) => setCleannessComment(e.target.value)} rows={4} placeholder="Расскажи максимально подробно, мы с удовольствием прочитаем!" maxLength={6} />
                 </Flex>
                 <Divider />
                 <Flex align={"center"}>
-                    <div style={{width: 180}}>Оцените уровень сервиса в отеле</div>
+                    <div style={{width: 330}}>Оцените уровень сервиса в отеле</div>
                     <Rate allowHalf value={serviceRating} onChange={(rating) => setServiceRating(rating)}/>
                 </Flex>
                 <Flex align={"center"}>
-                    <div style={{width: 180}}>Оставьте более подробный отзыв о сервисе в отеле</div>
+                    <div style={{width: 330}}>Оставьте более подробный отзыв о сервисе в отеле</div>
                     <TextArea value={serviceComment} onChange={(e) => setServiceComment(e.target.value)} rows={4} placeholder="Расскажи максимально подробно, мы с удовольствием прочитаем!" maxLength={6} />
                 </Flex>
                 <Divider />
                 <Flex align={"center"}>
-                    <div style={{width: 180}}>Оцените качество номер</div>
+                    <div style={{width: 330}}>Оцените качество номер</div>
                     <Rate allowHalf value={roomConditionRating} onChange={(rating) => setRoomConditionRating(rating)}/>
                 </Flex>
                 <Flex align={"center"}>
-                    <div style={{width: 180}}>Оставьте более подробный отзыв о качестве номеров</div>
+                    <div style={{width: 330}}>Оставьте более подробный отзыв о качестве номеров</div>
                     <TextArea value={roomConditionComment} onChange={(e) => setRoomConditionComment(e.target.value)} rows={4} placeholder="Расскажи максимально подробно, мы с удовольствием прочитаем!" maxLength={6} />
                 </Flex>
                 <Divider />
                 <Flex align={"center"}>
-                    <div style={{width: 180}}>Оцените соотношение цена/качество</div>
+                    <div style={{width: 330}}>Оцените соотношение цена/качество</div>
                     <Rate allowHalf value={moneyRating} onChange={(rating) => setMoneyRating(rating)}/>
                 </Flex>
                 <Flex align={"center"}>
-                    <div style={{width: 180}}>Оставьте improvementComment</div>
+                    <div style={{width: 330}}>Оставьте improvementComment</div>
                     <TextArea value={improvementComment} onChange={(e) => setImprovementComment(e.target.value)} rows={4} placeholder="Расскажи максимально подробно, мы с удовольствием прочитаем!" maxLength={6} />
                 </Flex>
                 <Flex align={"center"}>
-                    <div style={{width: 180}}>Оставьте общий отзыв об отеле</div>
+                    <div style={{width: 330}}>Оставьте общий отзыв об отеле</div>
                     <TextArea value={finalVerdict} onChange={(e) => setFinalVerdict(e.target.value)} rows={4} placeholder="Расскажи максимально подробно, мы с удовольствием прочитаем!" maxLength={6} />
                 </Flex>
                 <Divider />
                 <Flex align={"center"}>
-                    <div style={{width: 180}}>Статус</div>
+                    <div style={{width: 330}}>Статус</div>
                     <Input value={status} onChange={(e) => setStatus(e.target.value)} />
                 </Flex>
                 <Flex align={"center"}>
-                    <div style={{width: 180}}>Колличество баллов за отзыв</div>
+                    <div style={{width: 330}}>Колличество баллов за отзыв</div>
                     <InputNumber value={pointsFromAdmin} onChange={(val) => setPointsFromAdmin(val ?? 0)} />
                 </Flex>
             </Flex>

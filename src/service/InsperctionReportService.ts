@@ -1,43 +1,43 @@
 import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/dist/query/react";
 import {host} from "shared/config/constants";
-import {GuestRequestModel} from "entities/GuestRequestModel";
+import {InspectionReportModel} from "entities/InspectionReportModel";
 
-export const guestRequestAPI = createApi({
-    reducerPath: 'guestRequestAPI',
+export const inspectionReportAPI = createApi({
+    reducerPath: 'inspectionReportAPI',
     baseQuery: fetchBaseQuery({
-        baseUrl: `${host}/api/guestRequest`,
+        baseUrl: `${host}/api/inspectionReport`,
     }),
-    tagTypes: ['guestRequest'],
+    tagTypes: ['inspectionReport'],
     endpoints: (build) => ({
-        getAll: build.mutation<GuestRequestModel[], void>({
+        getAll: build.mutation<InspectionReportModel[], void>({
             query: () => ({
                 url: `/getAll`,
                 method: 'GET',
             }),
-            invalidatesTags: ['guestRequest']
+            invalidatesTags: ['inspectionReport']
         }),
-        get: build.mutation<GuestRequestModel, number>({
+        get: build.mutation<InspectionReportModel, number>({
             query: (id) => ({
                 url: `/get?id=${id}`,
                 method: 'GET',
             }),
-            invalidatesTags: ['guestRequest']
+            invalidatesTags: ['inspectionReport']
         }),
-        update: build.mutation<GuestRequestModel, GuestRequestModel>({
+        update: build.mutation<InspectionReportModel, InspectionReportModel>({
             query: (body) => ({
                 url: `/update`,
                 method: 'POST',
                 body
             }),
-            invalidatesTags: ['guestRequest']
+            invalidatesTags: ['inspectionReport']
         }),
-        create: build.mutation<GuestRequestModel, GuestRequestModel>({
+        create: build.mutation<InspectionReportModel, InspectionReportModel>({
             query: (body) => ({
                 url: `/create`,
                 method: 'POST',
                 body
             }),
-            invalidatesTags: ['guestRequest']
+            invalidatesTags: ['inspectionReport']
         }),
     })
 });

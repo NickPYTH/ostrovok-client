@@ -1,14 +1,14 @@
 import {GuestRequestModel} from "entities/GuestRequestModel";
 
 export type InspectionReportModel = {
-    id: number;
+    id: number | null;
     guestRequest: GuestRequestModel;
-    cleanRating: number;
+    cleannessRating: number;
     serviceRating: number;
     roomConditionRating: number;
     moneyRating: number;
     overallRating: number;
-    cleanlessComment: string;
+    cleannessComment: string;
     serviceComment: string;
     roomConditionComment: string;
     improvementComment: string;

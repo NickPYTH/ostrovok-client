@@ -72,18 +72,18 @@ const LoginPage = () => {
     }, []);
     useEffect(() => {
         if (verifyTokenIsSuccess) {
-            navigate('/course_list');
+            navigate('/users');
         }
     }, [verifyTokenIsSuccess]);
     useEffect(() => {
         if (getTokensResponse) {
-            if ('access' in getTokensResponse) {
+            if ('token' in getTokensResponse) {
                 let response: GetTokenResponseType = getTokensResponse as GetTokenResponseType;
-                if (response.access && response.refresh) {
-                    showSuccessNotification('topRight', response.access ?? "");
-                    localStorage.setItem('access', response.access);
-                    localStorage.setItem('refresh', response.refresh);
-                    setTimeout(() => navigate('/course_list'), 300);
+                if (response.token && response.role) {
+                    showSuccessNotification('topRight', response.role ?? "");
+                    localStorage.setItem('access', response.token);
+                    localStorage.setItem('refresh', response.token);
+                    setTimeout(() => navigate('/users'), 300);
                 }
             }
         }
@@ -92,7 +92,7 @@ const LoginPage = () => {
         if (getTokensError)
             if ('data' in getTokensError) {
                 let response: GetTokenResponseType = getTokensError.data as GetTokenResponseType;
-                showErrorNotification('topRight', response.detail ?? "");
+                showErrorNotification('topRight', response.token ?? "");
             }
         else
             showErrorNotification('topRight', "На сервере полный 3.14здец");

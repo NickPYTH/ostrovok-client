@@ -4,8 +4,8 @@ export type UserModel = {
     id: number | null;
     username: string;
     email: string;
-    password: string;
-    role: RoleModel;
-    createdAt: number;
-    updatedAt: number;
+    password: string | null;
+    role: string;
+    createdAt?: number;
+    updatedAt?: number;
 }

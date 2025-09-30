@@ -2,11 +2,10 @@ import React, {useEffect, useState} from 'react';
 import {Flex, Input, Modal, Select} from 'antd';
 import {UserModel} from "entities/UserModel";
 import {userAPI} from "service/UserService";
-import {RoleModel} from "entities/RoleModel";
-import {roleAPI} from "service/RoleService";
 import {NotificationPlacement} from "antd/es/notification/interface";
 import {useSelector} from "react-redux";
 import {RootStateType} from "store/store";
+import {ROLES} from "shared/config/constants";
 
 type ModalProps = {
     selectedUser: UserModel | null,
@@ -25,7 +24,7 @@ export const UserModal = (props: ModalProps) => {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [confirmPassword, setConfirmPassword] = useState<string>("");
-    const [roleId, setRoleId] = useState<number | null>(null);
+    const [role, setRole] = useState<string>(ROLES.ROLE_USER);
     // -----
 
     // Notifications
@@ -47,22 +46,14 @@ export const UserModal = (props: ModalProps) => {
         data: updated,
         isLoading: isUpdateLoading
     }] = userAPI.useUpdateMutation();
-    const [getRoles, {
-        data: roles,
-        isError: isRolesError,
-        isLoading: isRolesLoading
-    }] = roleAPI.useGetAllMutation();
     // -----
 
     // Effects
     useEffect(() => {
-        getRoles();
-    }, []);
-    useEffect(() => {
         if (props.selectedUser) {
             setUsername(props.selectedUser.username);
             setEmail(props.selectedUser.email);
-            setRoleId(props.selectedUser.role.id);
+            setRole(props.selectedUser.role == ROLES.ROLE_ADMIN ? ROLES.ROLE_ADMIN : ROLES.ROLE_USER);
         }
     }, [props.selectedUser]);
     useEffect(() => {
@@ -71,27 +62,17 @@ export const UserModal = (props: ModalProps) => {
             props.refresh();
         }
     }, [created, updated]);
-    useEffect(() => {
-        if (isRolesError) {
-            showErrorNotification("topRight", "Ошибка получения ролей");
-        }
-    }, [isRolesError])
     // -----
 
     // Handlers
     const confirmHandler = () => {
         if (username){
             let user: UserModel = {
-                id: 0,
-                username: '',
-                email: '',
-                password: '',
-                role: {
-                    id: 0,
-                    name: ''
-                },
-                createdAt: 0,
-                updatedAt: 0
+                id: null,
+                username,
+                email,
+                password: password ? password : "password",
+                role
             };
             if (props.selectedUser) update({...user, id: props.selectedUser.id});
             else create(user);
@@ -117,23 +98,26 @@ export const UserModal = (props: ModalProps) => {
                     <div style={{width: 180}}>Почта</div>
                     <Input value={email} onChange={(e) => setEmail(e.target.value)}/>
                 </Flex>
-                <Flex align={"center"}>
-                    <div style={{width: 180}}>Пароль</div>
-                    <Input type={"password"} value={password} onChange={(e) => setPassword(e.target.value)}/>
-                </Flex>
-                <Flex align={"center"}>
-                    <div style={{width: 180}}>Подтверждение</div>
-                    <Input type={"password"} value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}/>
-                </Flex>
+                {!props.selectedUser &&
+                    <>
+                        <Flex align={"center"}>
+                            <div style={{width: 180}}>Пароль</div>
+                            <Input type={"password"} value={password} onChange={(e) => setPassword(e.target.value)}/>
+                        </Flex>
+                        <Flex align={"center"}>
+                            <div style={{width: 180}}>Подтверждение</div>
+                            <Input type={"password"} value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}/>
+                        </Flex>
+                    </>
+                }
                 <Flex align={"center"}>
                     <div style={{width: 180}}>Роль</div>
                     <Select
-                        loading={isRolesLoading}
-                        value={roleId}
-                        placeholder={"Выберите филиал"}
+                        value={role}
+                        placeholder={"Выберите роль"}
                         style={{width: '100%'}}
-                        onChange={(e) => setRoleId(e)}
-                        options={roles?.map((role: RoleModel) => ({value: role.id, label: role.name}))}
+                        onChange={(e) => setRole(e)}
+                        options={[{value: ROLES.ROLE_USER, label: ROLES.ROLE_USER}, {value: ROLES.ROLE_ADMIN, label: ROLES.ROLE_ADMIN}]}
                     />
                 </Flex>
             </Flex>

@@ -5,13 +5,19 @@ import {UserModel} from "entities/UserModel";
 export const userAPI = createApi({
     reducerPath: 'userAPI',
     baseQuery: fetchBaseQuery({
-        baseUrl: `${host}/api/user`,
+        prepareHeaders: (headers, { getState }) => {
+            const token = localStorage.getItem('access');
+            if (token)
+                headers.set('authorization', `Bearer ${token}`);
+            return headers;
+        },
+        baseUrl: `${host}/api/users`,
     }),
     tagTypes: ['user'],
     endpoints: (build) => ({
         getAll: build.mutation<UserModel[], void>({
             query: () => ({
-                url: `/getAll`,
+                url: ``,
                 method: 'GET',
             }),
             invalidatesTags: ['user']
@@ -25,15 +31,15 @@ export const userAPI = createApi({
         }),
         update: build.mutation<UserModel, UserModel>({
             query: (body) => ({
-                url: `/update`,
-                method: 'POST',
+                url: `/${body.id}`,
+                method: 'PUT',
                 body
             }),
             invalidatesTags: ['user']
         }),
         create: build.mutation<UserModel, UserModel>({
             query: (body) => ({
-                url: `/create`,
+                url: ``,
                 method: 'POST',
                 body
             }),

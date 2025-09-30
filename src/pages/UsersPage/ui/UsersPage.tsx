@@ -73,20 +73,6 @@ const UsersPage: React.FC = () => {
             },
         },
         {
-            title: 'Наименование',
-            dataIndex: 'username',
-            key: 'username',
-            filters: data?.reduce((acc: { text: string, value: string }[], user: UserModel) => {
-                if (acc.find((g: { text: string, value: string }) => g.text === user.username) === undefined)
-                    return acc.concat({text: user.username, value: user.username});
-                return acc;
-            }, []),
-            filterSearch: true,
-            onFilter: (value: any, record: UserModel) => {
-                return record.username.indexOf(value) === 0
-            },
-        },
-        {
             title: 'Почта',
             dataIndex: 'email',
             key: 'email',
@@ -104,14 +90,13 @@ const UsersPage: React.FC = () => {
             title: 'Роль',
             dataIndex: 'role',
             key: 'role',
-            render: (_, record) => (<div>{record.role?.name}</div>),
         },
         {
             title: 'Создана',
             dataIndex: 'createdAt',
             key: 'createdAt',
         },
-    ]
+    ];
     // -----
 
     return (

@@ -2,9 +2,9 @@ import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/dist/query/react";
 import {host} from "shared/config/constants";
 
 export type GetTokenResponseType = {
-    refresh?: string,
-    access?: string,
-    detail?: string
+    token?: string,
+    role?: string,
+    //detail?: string
 }
 
 export type VerifyTokenResponseType = {
@@ -20,13 +20,13 @@ export type RefreshTokenResponseType = {
 export const authAPI = createApi({
     reducerPath: 'authAPI',
     baseQuery: fetchBaseQuery({
-        baseUrl: `${host}/api/auth/token`,
+        baseUrl: `${host}/api/auth`,
     }),
     tagTypes: ['auth'],
     endpoints: (build) => ({
         create: build.mutation<GetTokenResponseType, {username: string, password: string}>({
             query: (body) => ({
-                url: `/`,
+                url: `/login`,
                 method: 'POST',
                 body
             }),
@@ -34,7 +34,7 @@ export const authAPI = createApi({
         }),
         verify: build.mutation<VerifyTokenResponseType, {token: string}>({
             query: (body) => ({
-                url: `/verify/`,
+                url: `/token/verify/`,
                 method: 'POST',
                 body
             }),
@@ -42,7 +42,7 @@ export const authAPI = createApi({
         }),
         refresh: build.mutation<RefreshTokenResponseType, {refresh: string}>({
             query: (body) => ({
-                url: `/refresh/`,
+                url: `/token/refresh/`,
                 method: 'POST',
                 body
             }),

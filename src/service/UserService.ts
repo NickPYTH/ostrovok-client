@@ -24,7 +24,7 @@ export const userAPI = createApi({
         }),
         get: build.mutation<UserModel, number>({
             query: (id) => ({
-                url: `/get?id=${id}`,
+                url: `/${id}`,
                 method: 'GET',
             }),
             invalidatesTags: ['user']

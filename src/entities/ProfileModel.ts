@@ -8,7 +8,7 @@ export type ProfileModel = {
     lastName: string;
     patronymic: string;
     phone: string;
-    city: CityModel;
+    //city: CityModel;
     travelInterests: string;
     tgId: string;
     status: string;

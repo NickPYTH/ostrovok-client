@@ -5,35 +5,41 @@ import {ProfileModel} from "entities/ProfileModel";
 export const profileAPI = createApi({
     reducerPath: 'profileAPI',
     baseQuery: fetchBaseQuery({
-        baseUrl: `${host}/api/profile`,
+        prepareHeaders: (headers, { getState }) => {
+            const token = localStorage.getItem('access');
+            if (token)
+                headers.set('authorization', `Bearer ${token}`);
+            return headers;
+        },
+        baseUrl: `${host}/api/profiles`,
     }),
     tagTypes: ['profile'],
     endpoints: (build) => ({
         getAll: build.mutation<ProfileModel[], void>({
             query: () => ({
-                url: `/getAll`,
+                url: ``,
                 method: 'GET',
             }),
             invalidatesTags: ['profile']
         }),
         get: build.mutation<ProfileModel, number>({
             query: (id) => ({
-                url: `/get?id=${id}`,
+                url: `/${id}`,
                 method: 'GET',
             }),
             invalidatesTags: ['profile']
         }),
         update: build.mutation<ProfileModel, ProfileModel>({
             query: (body) => ({
-                url: `/update`,
-                method: 'POST',
+                url: `/${body.id}`,
+                method: 'PUT',
                 body
             }),
             invalidatesTags: ['profile']
         }),
         create: build.mutation<ProfileModel, ProfileModel>({
             query: (body) => ({
-                url: `/create`,
+                url: ``,
                 method: 'POST',
                 body
             }),

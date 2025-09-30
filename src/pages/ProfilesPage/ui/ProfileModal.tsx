@@ -69,7 +69,7 @@ export const ProfileModal = (props: ModalProps) => {
     // Effects
     useEffect(() => {
         getUsers();
-        getCities();
+        //getCities();
     }, []);
     useEffect(() => {
         if (props.selectedProfile) {
@@ -102,12 +102,12 @@ export const ProfileModal = (props: ModalProps) => {
 
     // Handlers
     const confirmHandler = () => {
-        if (firstName && cityId && lastName && patronymic && phone && rating && status && tgId && travelInterests && userId){
-            let city:CityModel|undefined = cities?.find((c:CityModel) => c.id == cityId);
+        if (firstName && lastName && patronymic && phone && rating && status && tgId && travelInterests && userId){
+            //let city:CityModel|undefined = cities?.find((c:CityModel) => c.id == cityId);
             let user:UserModel|undefined = users?.find((u:UserModel) => u.id == userId);
-            if (city && user) {
+            if (user) {
                 let profile: ProfileModel = {
-                    city,
+                    //city,
                     firstName,
                     id: null,
                     lastName,
@@ -164,17 +164,17 @@ export const ProfileModal = (props: ModalProps) => {
                         options={users?.map((user: UserModel) => ({value: user.id, label: user.username}))}
                     />
                 </Flex>
-                <Flex align={"center"}>
-                    <div style={{width: 180}}>Город</div>
-                    <Select
-                        loading={isCitiesLoading}
-                        value={cityId}
-                        placeholder={"Выберите город"}
-                        style={{width: '100%'}}
-                        onChange={(e) => setCityId(e)}
-                        options={cities?.map((city: CityModel) => ({value: city.id, label: city.name}))}
-                    />
-                </Flex>
+                {/*<Flex align={"center"}>*/}
+                {/*    <div style={{width: 180}}>Город</div>*/}
+                {/*    <Select*/}
+                {/*        loading={isCitiesLoading}*/}
+                {/*        value={cityId}*/}
+                {/*        placeholder={"Выберите город"}*/}
+                {/*        style={{width: '100%'}}*/}
+                {/*        onChange={(e) => setCityId(e)}*/}
+                {/*        options={cities?.map((city: CityModel) => ({value: city.id, label: city.name}))}*/}
+                {/*    />*/}
+                {/*</Flex>*/}
                 <Flex align={"center"}>
                     <div style={{width: 180}}>Интересы</div>
                     <Input value={travelInterests} onChange={(e) => setTravelInterests(e.target.value)}/>

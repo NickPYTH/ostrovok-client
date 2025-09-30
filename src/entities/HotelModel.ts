@@ -6,9 +6,9 @@ export type HotelModel = {
     description: string;
     action: string;
     address: string;
-    city: CityModel;
+    //city: CityModel;
     officialRating: number;
-    needsInspection: boolean;
+    neesInspection: boolean;
     inspectionReason: string;
     lastInspection: number | null;
     secretGreetAvgTail: number; // Бл что это)

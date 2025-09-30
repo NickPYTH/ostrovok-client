@@ -26,7 +26,7 @@ export const HotelModal = (props: ModalProps) => {
     const [description, setDescription] = useState("");
     const [action, setAction] = useState("");
     const [address, setAddress] = useState("");
-    const [cityId, setCityId] = useState<number | null>(null);
+    // const [cityId, setCityId] = useState<number | null>(null);
     const [officialRating, setOfficialRating] = useState(0);
     const [needsInspection, setNeedsInspection] = useState(false);
     const [inspectionReason, setInspectionReason] = useState("");
@@ -62,7 +62,7 @@ export const HotelModal = (props: ModalProps) => {
 
     // Effects
     useEffect(() => {
-        getCities();
+        //getCities();
     }, []);
     useEffect(() => {
         if (props.selectedHotel) {
@@ -70,9 +70,9 @@ export const HotelModal = (props: ModalProps) => {
             setDescription(props.selectedHotel.description);
             setAction(props.selectedHotel.action);
             setAddress(props.selectedHotel.address);
-            setCityId(props.selectedHotel.city.id);
+            //setCityId(props.selectedHotel.city.id);
             setOfficialRating(props.selectedHotel.officialRating);
-            setNeedsInspection(props.selectedHotel.needsInspection);
+            setNeedsInspection(props.selectedHotel.neesInspection);
             setLastInspection(props.selectedHotel.lastInspection);
             setSecretGreetAvgTail(props.selectedHotel.secretGreetAvgTail);
         }
@@ -91,26 +91,23 @@ export const HotelModal = (props: ModalProps) => {
 
     // Handlers
     const confirmHandler = () => {
-        if (cityId){
-            let city:CityModel|undefined = cities?.find((c:CityModel) => c.id == cityId);
-            if (city) {
+            //let city:CityModel|undefined = cities?.find((c:CityModel) => c.id == cityId);
                 let hotel: HotelModel = {
                     id: null,
                     action,
                     address,
-                    city,
+                    //city,
                     description,
                     inspectionReason,
                     lastInspection,
                     name,
-                    needsInspection,
+                    neesInspection: needsInspection,
                     officialRating,
                     secretGreetAvgTail
                 };
                 if (props.selectedHotel) update({...hotel, id: props.selectedHotel.id});
                 else create(hotel);
-            }
-        }
+
     }
     // -----
 
@@ -140,17 +137,17 @@ export const HotelModal = (props: ModalProps) => {
                     <div style={{width: 180}}>Адрес</div>
                     <Input value={address} onChange={(e) => setAddress(e.target.value)}/>
                 </Flex>
-                <Flex align={"center"}>
-                    <div style={{width: 180}}>Город</div>
-                    <Select
-                        loading={isCitiesLoading}
-                        value={cityId}
-                        placeholder={"Выберите город"}
-                        style={{width: '100%'}}
-                        onChange={(e) => setCityId(e)}
-                        options={cities?.map((city: CityModel) => ({value: city.id, label: city.name}))}
-                    />
-                </Flex>
+                {/*<Flex align={"center"}>*/}
+                {/*    <div style={{width: 180}}>Город</div>*/}
+                {/*    <Select*/}
+                {/*        loading={isCitiesLoading}*/}
+                {/*        value={cityId}*/}
+                {/*        placeholder={"Выберите город"}*/}
+                {/*        style={{width: '100%'}}*/}
+                {/*        onChange={(e) => setCityId(e)}*/}
+                {/*        options={cities?.map((city: CityModel) => ({value: city.id, label: city.name}))}*/}
+                {/*    />*/}
+                {/*</Flex>*/}
                 <Flex align={"center"}>
                     <div style={{width: 180}}>Официальный рейтинг</div>
                     <InputNumber value={officialRating} onChange={(val) => setOfficialRating(val ?? 0)}/>

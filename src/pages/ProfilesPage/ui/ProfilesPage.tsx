@@ -134,12 +134,12 @@ const ProfilePage: React.FC = () => {
                 return record.phone.indexOf(value) === 0
             },
         },
-        {
-            title: 'Город',
-            dataIndex: 'city',
-            key: 'city',
-            render: (_, record) => (<div>{record.city?.name}</div>),
-        },
+        // {
+        //     title: 'Город',
+        //     dataIndex: 'city',
+        //     key: 'city',
+        //     render: (_, record) => (<div>{record.city?.name}</div>),
+        // },
         {
             title: 'Интересы',
             dataIndex: 'travelInterests',

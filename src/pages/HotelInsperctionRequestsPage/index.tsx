@@ -1,3 +1,3 @@
-import UsersPage from "./ui/HotelInsperctionRequestsPage";
+import UsersPage from "./ui/HotelInspectionRequestsPage";
 
 export {UsersPage};

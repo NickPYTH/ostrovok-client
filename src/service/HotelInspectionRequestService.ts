@@ -5,27 +5,33 @@ import {HotelInspectionRequestModel} from "entities/HotelInspectionRequestModel"
 export const hotelInspectionRequestAPI = createApi({
     reducerPath: 'hotelInspectionRequestAPI',
     baseQuery: fetchBaseQuery({
-        baseUrl: `${host}/api/hotelInspectionRequest`,
+        prepareHeaders: (headers, { getState }) => {
+            const token = localStorage.getItem('access');
+            if (token)
+                headers.set('authorization', `Bearer ${token}`);
+            return headers;
+        },
+        baseUrl: `${host}/api/hotel-inspections`,
     }),
     tagTypes: ['hotelInspectionRequest'],
     endpoints: (build) => ({
         getAll: build.mutation<HotelInspectionRequestModel[], void>({
             query: () => ({
-                url: `/getAll`,
+                url: ``,
                 method: 'GET',
             }),
             invalidatesTags: ['hotelInspectionRequest']
         }),
         get: build.mutation<HotelInspectionRequestModel, number>({
             query: (id) => ({
-                url: `/get?id=${id}`,
+                url: `/${id}`,
                 method: 'GET',
             }),
             invalidatesTags: ['hotelInspectionRequest']
         }),
         update: build.mutation<HotelInspectionRequestModel, HotelInspectionRequestModel>({
             query: (body) => ({
-                url: `/update`,
+                url: ``,
                 method: 'POST',
                 body
             }),
@@ -33,7 +39,7 @@ export const hotelInspectionRequestAPI = createApi({
         }),
         create: build.mutation<HotelInspectionRequestModel, HotelInspectionRequestModel>({
             query: (body) => ({
-                url: `/create`,
+                url: ``,
                 method: 'POST',
                 body
             }),

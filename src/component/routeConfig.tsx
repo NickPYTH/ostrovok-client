@@ -4,7 +4,7 @@ import UsersPage from "pages/UsersPage/ui/UsersPage";
 import {LoginPage} from "pages/LoginPage";
 import ProfilesPage from "pages/ProfilesPage/ui/ProfilesPage";
 import HotelsPage from "pages/HotelsPage/ui/HotelsPage";
-import HotelInspectionRequestsPage from "pages/HotelInsperctionRequestsPage/ui/HotelInsperctionRequestsPage";
+import HotelInspectionRequestsPage from "pages/HotelInsperctionRequestsPage/ui/HotelInspectionRequestsPage";
 import GuestRequestsPage from "pages/GuestRequestsPage/ui/GuestRequestsPage";
 import InspectionReportsPage from "pages/InspectionReportsPage/ui/InspectionReportsPage";
 

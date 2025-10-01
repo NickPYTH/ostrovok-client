@@ -7,6 +7,7 @@ import {guestRequestAPI} from "service/GuestRequestService";
 import {GuestRequestModel} from "entities/GuestRequestModel";
 import {inspectionReportAPI} from "service/InsperctionReportService";
 import {InspectionReportModel} from "entities/InspectionReportModel";
+import {REPORT_STATUSES} from "shared/config/constants";
 
 const { TextArea } = Input;
 
@@ -191,7 +192,17 @@ export const InspectionReportModal = (props: ModalProps) => {
                 <Divider />
                 <Flex align={"center"}>
                     <div style={{width: 330}}>Статус</div>
-                    <Input value={status} onChange={(e) => setStatus(e.target.value)} />
+                    <Select
+                        loading={isGetGuestRequestsLoading}
+                        value={status}
+                        placeholder={"Выберите статус"}
+                        style={{width: '100%'}}
+                        onChange={(e) => setStatus(e)}
+                        options={[{value: REPORT_STATUSES.ON_MISSION, label:"Тайный гость на миссии"},
+                            {value: REPORT_STATUSES.REPORT_SENT, label:"Отчет отправлен"},
+                            {value: REPORT_STATUSES.CONFIRMED, label:"Обработано"},
+                        ]}
+                    />
                 </Flex>
                 <Flex align={"center"}>
                     <div style={{width: 330}}>Колличество баллов за отзыв</div>

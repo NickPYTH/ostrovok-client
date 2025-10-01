@@ -4,6 +4,7 @@ import {useSelector} from "react-redux";
 import {RootStateType} from "store/store";
 import {useNavigate} from "react-router-dom";
 import {TasksAndExecutorsWidget} from "pages/AnalyticPage/ui/TasksAndExecutorsWidget";
+import {FunnelWidget} from "pages/AnalyticPage/ui/FunnelWidget";
 
 type NotificationPlacement = NotificationArgsProps['placement'];
 
@@ -54,8 +55,9 @@ const AnalyticPage = () => {
     // -----
 
     return(
-        <Flex justify={'center'} align={'center'} style={{height: window.innerHeight}}>
+        <Flex justify={'space-evenly'} gap={'large'} style={{height: window.innerHeight}}>
             <TasksAndExecutorsWidget />
+            <FunnelWidget />
         </Flex>
     )
 }

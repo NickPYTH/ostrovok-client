@@ -32,7 +32,6 @@ export const TasksAndExecutorsWidget = () => {
             let all = hotelInspections.reduce((acc, inspection: HotelInspectionRequestModel) => {
                 return acc += inspection.sessionCount;
             }, 0);
-            console.log(all, guestRequests)
             setValue(guestRequests.length / all);
         }
     }, [guestRequests, hotelInspections]);
@@ -63,7 +62,6 @@ export const TasksAndExecutorsWidget = () => {
         statistic: {
             title: {
                 formatter: (props:any) => {
-                    console.log(ticks)
                     if (props.percent < ticks[1]) {
                         return 'Ой-ой...';
                     }

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {Divider, Flex, Input, InputNumber, Modal, Rate, Select, Upload, UploadFile, Button, message} from 'antd';
-import {UploadOutlined} from '@ant-design/icons';
+import {Divider, Flex, Input, InputNumber, Modal, Rate, Select, Upload, UploadFile, Button, message, Image} from 'antd';
+import {UploadOutlined, EyeOutlined} from '@ant-design/icons';
 import {NotificationPlacement} from "antd/es/notification/interface";
 import {useSelector} from "react-redux";
 import {RootStateType} from "store/store";
@@ -12,14 +12,22 @@ import {REPORT_STATUSES} from "shared/config/constants";
 
 const { TextArea } = Input;
 
+// Добавляем тип для медиа-файла
+interface ReportMedia {
+    id: string;
+    fileData: string; // Это base64 строка с изображением
+    fileName?: string;
+    mimeType?: string;
+}
+
 type ModalProps = {
     inspectionReport: InspectionReportModel | null,
     visible: boolean,
     setVisible: Function,
     refresh: Function
 };
-export const InspectionReportModal = (props: ModalProps) => {
 
+export const InspectionReportModal = (props: ModalProps) => {
     // Store
     const notificationAPI = useSelector((state: RootStateType) => state.currentUser.notificationContextApi);
     const currentUser = useSelector((state: RootStateType) => state.currentUser.user);
@@ -41,6 +49,8 @@ export const InspectionReportModal = (props: ModalProps) => {
     const [pointsFromAdmin, setPointsFromAdmin] = useState<number|null>(null);
     const [fileList, setFileList] = useState<UploadFile[]>([]);
     const [isUploading, setIsUploading] = useState(false);
+    const [existingMedia, setExistingMedia] = useState<ReportMedia[]>([]);
+    const [isLoadingMedia, setIsLoadingMedia] = useState(false);
     // -----
 
     // Notifications
@@ -69,12 +79,35 @@ export const InspectionReportModal = (props: ModalProps) => {
     }] = guestRequestAPI.useGetAllMutation();
     // -----
 
-    // File upload functions
+    // Функция для загрузки прикрепленных медиа-файлов
+    const fetchReportMedia = async (reportId: string) => {
+        if (!reportId) return;
+
+        setIsLoadingMedia(true);
+        try {
+            const response = await fetch(`http://localhost:8080/api/report-media?reportId=${reportId}`);
+            if (response.ok) {
+                const mediaData: ReportMedia[] = await response.json();
+                setExistingMedia(mediaData);
+            } else if (response.status !== 404) {
+                showErrorNotification("topRight", "Ошибка загрузки прикрепленных файлов");
+            }
+        } catch (error) {
+            console.error('Error fetching report media:', error);
+            showErrorNotification("topRight", "Ошибка загрузки прикрепленных файлов");
+        } finally {
+            setIsLoadingMedia(false);
+        }
+    };
+
+    // File upload handlers
     const handleFileChange = ({ fileList: newFileList }: { fileList: UploadFile[] }) => {
         setFileList(newFileList);
     };
 
     const uploadFilesSequentially = async (reportId: string) => {
+        if (fileList.length === 0) return;
+
         setIsUploading(true);
 
         for (const file of fileList) {
@@ -112,6 +145,7 @@ export const InspectionReportModal = (props: ModalProps) => {
     useEffect(() => {
         getGuestRequests();
     }, []);
+
     useEffect(() => {
         if (props.inspectionReport) {
             setGuestRequestId(props.inspectionReport.guestRequest.id);
@@ -128,19 +162,33 @@ export const InspectionReportModal = (props: ModalProps) => {
             setFinalVerdict(props.inspectionReport.finalVerdict);
             setStatus(props.inspectionReport.status);
             setPointsFromAdmin(props.inspectionReport.pointsFromAdmin);
+
+            // Загружаем прикрепленные файлы если отчет уже существует
+            if (props.inspectionReport.id) {
+                fetchReportMedia(props.inspectionReport.id.toString());
+            }
+        } else {
+            // Сбрасываем состояние при создании нового отчета
+            setExistingMedia([]);
         }
     }, [props.inspectionReport]);
+
     useEffect(() => {
         if (created || updated) {
             const reportId = created?.id || updated?.id;
-            if (reportId && fileList.length > 0) {
-                uploadFilesSequentially(reportId.toString());
+            if (reportId) {
+                // Загружаем файлы после создания/обновления отчета
+                uploadFilesSequentially(reportId.toString()).then(() => {
+                    props.setVisible(false);
+                    props.refresh();
+                });
+            } else {
+                props.setVisible(false);
+                props.refresh();
             }
-
-            props.setVisible(false);
-            props.refresh();
         }
     }, [created, updated]);
+
     useEffect(() => {
         if (isGetGuestRequestsError)
             showErrorNotification("topRight", "Ошибка получения заявок");
@@ -179,16 +227,52 @@ export const InspectionReportModal = (props: ModalProps) => {
             onSuccess("ok");
         }, 0);
     };
+
+    // Функция для отображения существующих изображений
+    const renderExistingMedia = () => {
+        if (existingMedia.length === 0) return null;
+
+        return (
+            <Flex align={"center"} style={{ marginBottom: 16 }}>
+                <div style={{width: 330}}>Прикрепленные файлы:</div>
+                <Flex wrap="wrap" gap="small">
+                    {existingMedia.map((media) => (
+                        <div key={media.id} style={{ position: 'relative' }}>
+                            <Image
+                                width={80}
+                                height={80}
+                                src={`data:image/jpeg;base64,${media.fileData}`}
+                                placeholder={
+                                    <div style={{ width: 80, height: 80, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f5f5f5' }}>
+                                        Loading...
+                                    </div>
+                                }
+                                preview={{
+                                    mask: <><EyeOutlined /> Просмотр</>,
+                                }}
+                                style={{
+                                    objectFit: 'cover',
+                                    border: '1px solid #d9d9d9',
+                                    borderRadius: 6
+                                }}
+                            />
+                        </div>
+                    ))}
+                </Flex>
+            </Flex>
+        );
+    };
     // -----
 
     return (
-        <Modal title={props.inspectionReport ? "Редактирование отчета" : "Создание отчета"}
-               open={props.visible}
-               loading={(isCreateLoading || isUpdateLoading || isUploading)}
-               onOk={confirmHandler}
-               onCancel={() => props.setVisible(false)}
-               okText={props.inspectionReport ? "Сохранить" : "Создать"}
-               width={'700px'}
+        <Modal
+            title={props.inspectionReport ? "Редактирование отчета" : "Создание отчета"}
+            open={props.visible}
+            loading={isCreateLoading || isUpdateLoading || isUploading || isLoadingMedia}
+            onOk={confirmHandler}
+            onCancel={() => props.setVisible(false)}
+            okText={props.inspectionReport ? "Сохранить" : "Создать"}
+            width={'700px'}
         >
             <Flex gap={'small'} vertical={true}>
                 <Flex align={"center"}>
@@ -247,10 +331,13 @@ export const InspectionReportModal = (props: ModalProps) => {
                     <TextArea value={finalVerdict} onChange={(e) => setFinalVerdict(e.target.value)} rows={4} placeholder="Расскажи максимально подробно, мы с удовольствием прочитаем!" maxLength={6} />
                 </Flex>
 
-                {/* Новое поле для загрузки файлов */}
+                {/* Новый блок для отображения существующих файлов */}
+                {props.inspectionReport && renderExistingMedia()}
+
+                {/* Блок для загрузки новых файлов */}
                 <Divider />
                 <Flex align={"center"}>
-                    <div style={{width: 330}}>Прикрепить файлы</div>
+                    <div style={{width: 330}}>Добавить файлы</div>
                     <Upload
                         customRequest={customRequest}
                         fileList={fileList}
@@ -280,7 +367,7 @@ export const InspectionReportModal = (props: ModalProps) => {
                     />
                 </Flex>
                 <Flex align={"center"}>
-                    <div style={{width: 330}}>Колличество баллов за отзыв</div>
+                    <div style={{width: 330}}>Количество баллов за отзыв</div>
                     <InputNumber value={pointsFromAdmin} onChange={(val) => setPointsFromAdmin(val ?? 0)} />
                 </Flex>
             </Flex>

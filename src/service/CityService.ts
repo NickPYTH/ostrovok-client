@@ -5,35 +5,35 @@ import {CityModel} from "entities/CityModel";
 export const cityAPI = createApi({
     reducerPath: 'cityAPI',
     baseQuery: fetchBaseQuery({
-        baseUrl: `${host}/api/city`,
+        baseUrl: `${host}/api/cities`,
     }),
     tagTypes: ['city'],
     endpoints: (build) => ({
         getAll: build.mutation<CityModel[], void>({
             query: () => ({
-                url: `/getAll`,
+                url: ``,
                 method: 'GET',
             }),
             invalidatesTags: ['city']
         }),
         get: build.mutation<CityModel, number>({
             query: (id) => ({
-                url: `/get?id=${id}`,
+                url: `/${id}`,
                 method: 'GET',
             }),
             invalidatesTags: ['city']
         }),
         update: build.mutation<CityModel, CityModel>({
             query: (body) => ({
-                url: `/update`,
-                method: 'POST',
+                url: `/${body.id}`,
+                method: 'PUT',
                 body
             }),
             invalidatesTags: ['city']
         }),
         create: build.mutation<CityModel, CityModel>({
             query: (body) => ({
-                url: `/create`,
+                url: ``,
                 method: 'POST',
                 body
             }),

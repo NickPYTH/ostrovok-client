@@ -8,11 +8,12 @@ export type ProfileModel = {
     lastName: string;
     patronymic: string;
     phone: string;
-    //city: CityModel;
-    travelInterests: string;
+    city: CityModel;
+    interests: string;
     tgId: string;
     status: string;
     rating: number;
 
     userId?: number
+    cityId?: number
 }

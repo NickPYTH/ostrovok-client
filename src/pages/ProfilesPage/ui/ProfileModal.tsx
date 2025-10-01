@@ -69,16 +69,18 @@ export const ProfileModal = (props: ModalProps) => {
     // Effects
     useEffect(() => {
         getUsers();
-        //getCities();
+        getCities();
     }, []);
     useEffect(() => {
         if (props.selectedProfile) {
             setUserId(props.selectedProfile.user.id);
+            setCityId(props.selectedProfile.city.id);
+            setTravelInterests(props.selectedProfile.interests);
             setFirstName(props.selectedProfile.firstName);
             setLastName(props.selectedProfile.lastName);
             setPatronymic(props.selectedProfile.patronymic);
             setPhone(props.selectedProfile.phone);
-            setTravelInterests(props.selectedProfile.travelInterests);
+            setTravelInterests(props.selectedProfile.interests);
             setTgId(props.selectedProfile.tgId);
             setStatus(props.selectedProfile.status);
             setRating(props.selectedProfile.rating);
@@ -102,12 +104,12 @@ export const ProfileModal = (props: ModalProps) => {
 
     // Handlers
     const confirmHandler = () => {
-        if (firstName && lastName && patronymic && phone && rating && status && tgId && travelInterests && userId){
-            //let city:CityModel|undefined = cities?.find((c:CityModel) => c.id == cityId);
+        if (firstName && lastName && patronymic && phone && status && tgId && travelInterests && userId){
+            let city:CityModel|undefined = cities?.find((c:CityModel) => c.id == cityId);
             let user:UserModel|undefined = users?.find((u:UserModel) => u.id == userId);
-            if (user) {
+            if (user && city) {
                 let profile: ProfileModel = {
-                    //city,
+                    city,
                     firstName,
                     id: null,
                     lastName,
@@ -116,9 +118,10 @@ export const ProfileModal = (props: ModalProps) => {
                     rating,
                     status,
                     tgId,
-                    travelInterests,
+                    interests: travelInterests,
                     user,
-                    userId: user.id ?? 0
+                    userId: user.id ?? 0,
+                    cityId: city.id ?? 0
                 };
                 if (props.selectedProfile) update({...profile, id: props.selectedProfile.id});
                 else create(profile);
@@ -164,17 +167,17 @@ export const ProfileModal = (props: ModalProps) => {
                         options={users?.map((user: UserModel) => ({value: user.id, label: user.username}))}
                     />
                 </Flex>
-                {/*<Flex align={"center"}>*/}
-                {/*    <div style={{width: 180}}>Город</div>*/}
-                {/*    <Select*/}
-                {/*        loading={isCitiesLoading}*/}
-                {/*        value={cityId}*/}
-                {/*        placeholder={"Выберите город"}*/}
-                {/*        style={{width: '100%'}}*/}
-                {/*        onChange={(e) => setCityId(e)}*/}
-                {/*        options={cities?.map((city: CityModel) => ({value: city.id, label: city.name}))}*/}
-                {/*    />*/}
-                {/*</Flex>*/}
+                <Flex align={"center"}>
+                    <div style={{width: 180}}>Город</div>
+                    <Select
+                        loading={isCitiesLoading}
+                        value={cityId}
+                        placeholder={"Выберите город"}
+                        style={{width: '100%'}}
+                        onChange={(e) => setCityId(e)}
+                        options={cities?.map((city: CityModel) => ({value: city.id, label: city.name}))}
+                    />
+                </Flex>
                 <Flex align={"center"}>
                     <div style={{width: 180}}>Интересы</div>
                     <Input value={travelInterests} onChange={(e) => setTravelInterests(e.target.value)}/>

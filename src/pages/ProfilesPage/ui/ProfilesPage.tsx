@@ -107,20 +107,6 @@ const ProfilePage: React.FC = () => {
             },
         },
         {
-            title: 'Отчество',
-            dataIndex: 'patronymic',
-            key: 'patronymic',
-            filters: data?.reduce((acc: { text: string, value: string }[], user: ProfileModel) => {
-                if (acc.find((g: { text: string, value: string }) => g.text === user.patronymic) === undefined)
-                    return acc.concat({text: user.patronymic, value: user.patronymic});
-                return acc;
-            }, []),
-            filterSearch: true,
-            onFilter: (value: any, record: ProfileModel) => {
-                return record.patronymic.indexOf(value) === 0
-            },
-        },
-        {
             title: 'Телефон',
             dataIndex: 'phone',
             key: 'phone',
@@ -134,16 +120,16 @@ const ProfilePage: React.FC = () => {
                 return record.phone.indexOf(value) === 0
             },
         },
-        // {
-        //     title: 'Город',
-        //     dataIndex: 'city',
-        //     key: 'city',
-        //     render: (_, record) => (<div>{record.city?.name}</div>),
-        // },
+        {
+            title: 'Город',
+            dataIndex: 'city',
+            key: 'city',
+            render: (_, record) => (<div>{record.city?.name}</div>),
+        },
         {
             title: 'Интересы',
-            dataIndex: 'travelInterests',
-            key: 'travelInterests',
+            dataIndex: 'interests',
+            key: 'interests',
         },
         {
             title: 'TG id',

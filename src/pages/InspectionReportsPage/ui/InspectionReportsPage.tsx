@@ -75,7 +75,7 @@ const InspectionReportsPage: React.FC = () => {
             title: 'Рейтинг чистоты',
             dataIndex: 'cleannessRating',
             key: 'cleannessRating',
-            render: (_, record) => (<Rate disabled defaultValue={record.cleannessRating}/>),
+            render: (_, record) => (<Rate disabled defaultValue={record.cleanRating}/>),
         },
         {
             title: 'Рейтинг сервиса',

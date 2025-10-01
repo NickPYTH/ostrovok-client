@@ -32,7 +32,7 @@ export const hotelAPI = createApi({
         update: build.mutation<HotelModel, HotelModel>({
             query: (body) => ({
                 url: `/${body.id}`,
-                method: 'POST',
+                method: 'PUT',
                 body
             }),
             invalidatesTags: ['hotel']

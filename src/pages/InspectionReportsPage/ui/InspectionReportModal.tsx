@@ -72,12 +72,13 @@ export const InspectionReportModal = (props: ModalProps) => {
     useEffect(() => {
         if (props.inspectionReport) {
             setGuestRequestId(props.inspectionReport.guestRequest.id);
-            setCleannessRating(props.inspectionReport.cleannessRating);
+            setCleannessRating(props.inspectionReport.cleanRating);
             setServiceRating(props.inspectionReport.serviceRating);
             setRoomConditionRating(props.inspectionReport.roomConditionRating);
             setMoneyRating(props.inspectionReport.moneyRating);
             setOverallRating(props.inspectionReport.overallRating);
-            setCleannessComment(props.inspectionReport.cleannessComment);
+            setCleannessComment(props.inspectionReport.cleanlessComment);
+            setRoomConditionComment(props.inspectionReport.roomConditionComment);
             setServiceComment(props.inspectionReport.serviceComment);
             setRoomConditionRating(props.inspectionReport.roomConditionRating);
             setImprovementComment(props.inspectionReport.improvementComment);
@@ -104,8 +105,8 @@ export const InspectionReportModal = (props: ModalProps) => {
             const guestRequest:GuestRequestModel|undefined = guestRequests?.find((g:GuestRequestModel) => g.id == guestRequestId);
             if (guestRequest) {
                 let report: InspectionReportModel = {
-                    cleannessComment: cleannessComment,
-                    cleannessRating,
+                    cleanlessComment: cleannessComment,
+                    cleanRating: cleannessRating,
                     finalVerdict,
                     guestRequest,
                     id: null,

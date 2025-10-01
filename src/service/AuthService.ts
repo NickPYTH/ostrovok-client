@@ -9,7 +9,9 @@ export type GetTokenResponseType = {
 
 export type VerifyTokenResponseType = {
     detail?: string,
-    code?: string
+    code?: string,
+    role: string,
+    username: string
 }
 
 export type RefreshTokenResponseType = {

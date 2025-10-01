@@ -1,51 +1,23 @@
 import {authAPI} from "service/AuthService";
 import React, {useEffect, useState} from "react";
 import {Menu, MenuProps, NotificationArgsProps} from "antd";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {RootStateType} from "store/store";
 import {useLocation, useNavigate} from "react-router-dom";
 import {LogoutOutlined} from "@ant-design/icons";
+import {setCurrentUser} from "store/slice/UserSlice";
+import {UserModel} from "entities/UserModel";
 
 type MenuItem = Required<MenuProps>['items'][number];
 
-const items: MenuItem[] = [
-    {
-        label: 'Пользователи',
-        key: 'users',
-    },
-    {
-        label: 'Профили',
-        key: 'profiles',
-    },
-    {
-        label: 'Отели',
-        key: 'hotels',
-    },
-    {
-        label: 'Инспекции отелей',
-        key: 'hotelInspectionRequests',
-    },
-    {
-        label: 'Заявки тайных гостей',
-        key: 'guestRequests',
-    },
-    {
-        label: 'Отчеты',
-        key: 'inspectionReports',
-    },
-    {
-        label: 'Аналитика',
-        key: 'analytic',
-    },
-    {
-        label: 'Выйти',
-        key: 'logout',
-        icon: <LogoutOutlined />,
-    },
-]
 
 type NotificationPlacement = NotificationArgsProps['placement'];
 export const Navbar = () => {
+
+    // Store
+    const user = useSelector((state: RootStateType) => state.currentUser.user);
+    const dispatch = useDispatch();
+    // -----
 
     // States
     let location = useLocation();
@@ -82,6 +54,7 @@ export const Navbar = () => {
 
     // Web requests
     const [verifyTokenRequest, {
+        data: verifyTokenData,
         isError: verifyTokenIsError,
     }] = authAPI.useVerifyMutation();
     const [refreshTokenRequest, {
@@ -121,7 +94,17 @@ export const Navbar = () => {
             localStorage.clear();
             navigate('/login');
         }
-    }, [refreshTokenIsError])
+    }, [refreshTokenIsError]);
+    useEffect(() => {
+        if (verifyTokenData){
+            console.log(verifyTokenData);
+            let user: UserModel = {
+                email: "", id: null, password: "123", role: verifyTokenData.role, username: verifyTokenData.username
+
+            }
+            dispatch(setCurrentUser(user));
+        }
+    }, [verifyTokenData]);
     // -----
 
     // Handlers
@@ -139,6 +122,65 @@ export const Navbar = () => {
         }
         setCurrentMenuItem(e.key);
     };
+    // -----
+
+    // Useful utils
+    const items: MenuItem[] = user?.role == 'ROLE_ADMIN' ?
+        [
+        {
+            label: 'Пользователи',
+            key: 'users',
+        },
+        {
+            label: 'Профили',
+            key: 'profiles',
+        },
+        {
+            label: 'Отели',
+            key: 'hotels',
+        },
+        {
+            label: 'Инспекции отелей',
+            key: 'hotelInspectionRequests',
+        },
+        {
+            label: 'Заявки тайных гостей',
+            key: 'guestRequests',
+        },
+        {
+            label: 'Отчеты',
+            key: 'inspectionReports',
+        },
+        {
+            label: 'Аналитика',
+            key: 'analytic',
+        },
+        {
+            label: 'Выйти',
+            key: 'logout',
+            icon: <LogoutOutlined />,
+        },
+    ]
+        :
+        [
+            {
+                label: 'Отели',
+                key: 'hotels',
+            },
+            {
+                label: 'Доступные к инспекции отели',
+                key: 'hotelInspectionRequests',
+            },
+            {
+                label: 'Ваши заявки на инспекцию',
+                key: 'guestRequests',
+            },
+            {
+                label: 'Выйти',
+                key: 'logout',
+                icon: <LogoutOutlined />,
+            },
+        ];
     // -----
 
     if (window.location.pathname.indexOf('login') == -1) return (

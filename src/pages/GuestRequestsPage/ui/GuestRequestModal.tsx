@@ -8,8 +8,6 @@ import {HotelInspectionRequestModel} from "entities/HotelInspectionRequestModel"
 import {hotelInspectionRequestAPI} from "service/HotelInspectionRequestService";
 import {guestRequestAPI} from "service/GuestRequestService";
 import {GuestRequestModel} from "entities/GuestRequestModel";
-import {userAPI} from "service/UserService";
-import {UserModel} from "entities/UserModel";
 import {profileAPI} from "service/ProfileService";
 import {ProfileModel} from "entities/ProfileModel";
 
@@ -86,6 +84,16 @@ export const GuestRequestModal = (props: ModalProps) => {
         if (isHotelInspectionRequestsError)
             showErrorNotification("topRight", "Ошибка получения городов");
     }, [isHotelInspectionRequestsError]);
+    useEffect(() => {
+        if (profiles) {
+            if (currentUser){
+                if (currentUser.role == "ROLE_USER") {
+                    let id = profiles.find((p:ProfileModel) => p.user.username == currentUser?.username)?.id;
+                    if (id) setGuestId(id)
+                }
+            }
+        }
+    }, [profiles])
     // -----
 
     // Handlers
@@ -119,11 +127,11 @@ export const GuestRequestModal = (props: ModalProps) => {
                onOk={confirmHandler}
                onCancel={() => props.setVisible(false)}
                okText={props.selectedRequest ? "Сохранить" : "Создать"}
-               width={'550px'}
+               width={'650px'}
         >
             <Flex gap={'small'} vertical={true}>
                 <Flex align={"center"}>
-                    <div style={{width: 180}}>Инспектируемый отель</div>
+                    <div style={{width: 230}}>Инспектируемый отель</div>
                     <Select
                         loading={isHotelInspectionRequestsLoading}
                         value={hotelInspectionRequestId}
@@ -133,10 +141,11 @@ export const GuestRequestModal = (props: ModalProps) => {
                         options={hotelInspectionRequests?.map((hr: HotelInspectionRequestModel) => ({value: hr.id, label: hr.hotel.name}))}
                     />
                 </Flex>
-                <Flex align={"center"}>
-                    <div style={{width: 180}}>Секрктный гость</div>
+                <Flex align={"center"} >
+                    <div style={{width: 230}}>Секретный гость</div>
                     <Select
                         loading={isProfilesLoading}
+                        disabled={currentUser?.role == "ROLE_USER"}
                         value={guestId}
                         placeholder={"Выберите пользователя"}
                         style={{width: '100%'}}
@@ -145,11 +154,11 @@ export const GuestRequestModal = (props: ModalProps) => {
                     />
                 </Flex>
                 <Flex align={"center"}>
-                    <div style={{width: 180}}>Дата заезда</div>
+                    <div style={{width: 230}}>Дата заезда</div>
                     <DatePicker value={dateStart ? dayjs(dateStart, 'YYYY-MM-DDTHH:mm:ss') : dayjs()} onChange={date => setDateStart(date.format('YYYY-MM-DDTHH:mm:ss'))}/>
                 </Flex>
                 <Flex align={"center"}>
-                    <div style={{width: 180}}>Дата выезда</div>
+                    <div style={{width: 230}}>Дата выезда</div>
                     <DatePicker value={dateFinish ? dayjs(dateFinish, 'YYYY-MM-DDTHH:mm:ss') : dayjs()} onChange={date => setDateFinish(date.format('YYYY-MM-DDTHH:mm:ss'))}/>
                 </Flex>
             </Flex>

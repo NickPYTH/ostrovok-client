@@ -139,6 +139,7 @@ const HotelPage: React.FC = () => {
             <Button type={'primary'} onClick={() => setIsVisibleModal(true)}
                     style={{width: 100}}>Добавить</Button>
             <Table
+                bordered
                 style={{width: '100vw'}}
                 columns={columns}
                 dataSource={data}

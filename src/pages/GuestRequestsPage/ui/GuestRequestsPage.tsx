@@ -12,6 +12,7 @@ const GuestRequestsPage: React.FC = () => {
 
     // Store
     const notificationAPI = useSelector((state: RootStateType) => state.currentUser.notificationContextApi);
+    const currentUser = useSelector((state: RootStateType) => state.currentUser.user);
     // -----
 
     // States
@@ -94,9 +95,10 @@ const GuestRequestsPage: React.FC = () => {
             <Button type={'primary'} onClick={() => setIsVisibleModal(true)}
                     style={{width: 100}}>Добавить</Button>
             <Table
+                bordered
                 style={{width: '100vw'}}
                 columns={columns}
-                dataSource={data}
+                dataSource={data?.filter((request:GuestRequestModel) => request.guest.user.username == currentUser?.username)}
                 loading={isDataLoading}
                 pagination={{
                     defaultPageSize: 100,

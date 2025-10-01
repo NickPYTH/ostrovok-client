@@ -9,6 +9,7 @@ import {ProfileModel} from "entities/ProfileModel";
 import {profileAPI} from "service/ProfileService";
 import {cityAPI} from "service/CityService";
 import {CityModel} from "entities/CityModel";
+import {PROFILE_STATUSES, REPORT_STATUSES} from "shared/config/constants";
 
 type ModalProps = {
     selectedProfile: ProfileModel | null,
@@ -188,7 +189,16 @@ export const ProfileModal = (props: ModalProps) => {
                 </Flex>
                 <Flex align={"center"}>
                     <div style={{width: 180}}>Статус</div>
-                    <Input value={status} onChange={(e) => setStatus(e.target.value)}/>
+                    <Select
+                        value={status}
+                        placeholder={"Выберите статус"}
+                        style={{width: '100%'}}
+                        onChange={(e) => setStatus(e)}
+                        options={[{value: PROFILE_STATUSES.VERIFY, label:"На проверке"},
+                            {value: PROFILE_STATUSES.CONFIRMED, label:"Подтвержден"},
+                            {value: PROFILE_STATUSES.CANCELED, label:"Отклонен"},
+                        ]}
+                    />
                 </Flex>
                 <Flex align={"center"}>
                     <div style={{width: 180}}>Рейтинг</div>

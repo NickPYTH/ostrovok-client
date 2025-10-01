@@ -1,9 +1,11 @@
 import {Button, Flex, Input, NotificationArgsProps, Space} from "antd";
 import React, {useEffect, useState} from "react";
 import {GetTokenResponseType, authAPI} from "service/AuthService";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {RootStateType} from "store/store";
 import {useNavigate} from "react-router-dom";
+import {setCurrentUser} from "store/slice/UserSlice";
+import {UserModel} from "entities/UserModel";
 
 type NotificationPlacement = NotificationArgsProps['placement'];
 
@@ -11,6 +13,7 @@ const LoginPage = () => {
 
     // Store
     const notificationAPI = useSelector((state: RootStateType) => state.currentUser.notificationContextApi);
+    const dispatch = useDispatch();
     // -----
     
     // States
@@ -83,7 +86,15 @@ const LoginPage = () => {
                     showSuccessNotification('topRight', response.role ?? "");
                     localStorage.setItem('access', response.token);
                     localStorage.setItem('refresh', response.token);
-                    setTimeout(() => navigate('/users'), 300);
+                    // pzdc но времени мало
+                    let user:UserModel = {
+                        email: "", id: 123, password: "123", role: response.role, username: ""
+                    }
+                    dispatch(setCurrentUser(user));
+                    if (response.role == 'ROLE_USER')
+                        setTimeout(() => navigate('/hotels'), 300);
+                    else
+                        setTimeout(() => navigate('/users'), 300);
                 }
             }
         }

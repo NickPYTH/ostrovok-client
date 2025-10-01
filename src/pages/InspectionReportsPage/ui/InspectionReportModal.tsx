@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {Divider, Flex, Input, InputNumber, Modal, Rate, Select} from 'antd';
+import {Divider, Flex, Input, InputNumber, Modal, Rate, Select, Upload, UploadFile, Button, message} from 'antd';
+import {UploadOutlined} from '@ant-design/icons';
 import {NotificationPlacement} from "antd/es/notification/interface";
 import {useSelector} from "react-redux";
 import {RootStateType} from "store/store";
@@ -38,6 +39,8 @@ export const InspectionReportModal = (props: ModalProps) => {
     const [finalVerdict, setFinalVerdict] = useState("");
     const [status, setStatus] = useState("");
     const [pointsFromAdmin, setPointsFromAdmin] = useState<number|null>(null);
+    const [fileList, setFileList] = useState<UploadFile[]>([]);
+    const [isUploading, setIsUploading] = useState(false);
     // -----
 
     // Notifications
@@ -66,6 +69,45 @@ export const InspectionReportModal = (props: ModalProps) => {
     }] = guestRequestAPI.useGetAllMutation();
     // -----
 
+    // File upload functions
+    const handleFileChange = ({ fileList: newFileList }: { fileList: UploadFile[] }) => {
+        setFileList(newFileList);
+    };
+
+    const uploadFilesSequentially = async (reportId: string) => {
+        setIsUploading(true);
+
+        for (const file of fileList) {
+            if (file.originFileObj) {
+                try {
+                    const formData = new FormData();
+                    formData.append("file", file.originFileObj, file.name);
+
+                    const response = await fetch(`http://localhost:8080/api/report-media?reportId=${reportId}`, {
+                        method: "POST",
+                        body: formData,
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`Upload failed for ${file.name}`);
+                    }
+
+                    const result = await response.text();
+                    console.log(`File ${file.name} uploaded successfully:`, result);
+
+                } catch (error) {
+                    console.error(`Error uploading ${file.name}:`, error);
+                    showErrorNotification("topRight", `Ошибка загрузки файла ${file.name}`);
+                    continue;
+                }
+            }
+        }
+
+        setIsUploading(false);
+        message.success("Все файлы загружены");
+        setFileList([]);
+    };
+
     // Effects
     useEffect(() => {
         getGuestRequests();
@@ -90,6 +132,11 @@ export const InspectionReportModal = (props: ModalProps) => {
     }, [props.inspectionReport]);
     useEffect(() => {
         if (created || updated) {
+            const reportId = created?.id || updated?.id;
+            if (reportId && fileList.length > 0) {
+                uploadFilesSequentially(reportId.toString());
+            }
+
             props.setVisible(false);
             props.refresh();
         }
@@ -126,12 +173,18 @@ export const InspectionReportModal = (props: ModalProps) => {
             }
         }
     }
+
+    const customRequest = ({ file, onSuccess }: any) => {
+        setTimeout(() => {
+            onSuccess("ok");
+        }, 0);
+    };
     // -----
 
     return (
         <Modal title={props.inspectionReport ? "Редактирование отчета" : "Создание отчета"}
                open={props.visible}
-               loading={(isCreateLoading || isUpdateLoading)}
+               loading={(isCreateLoading || isUpdateLoading || isUploading)}
                onOk={confirmHandler}
                onCancel={() => props.setVisible(false)}
                okText={props.inspectionReport ? "Сохранить" : "Создать"}
@@ -193,6 +246,24 @@ export const InspectionReportModal = (props: ModalProps) => {
                     <div style={{width: 330}}>Оставьте общий отзыв об отеле</div>
                     <TextArea value={finalVerdict} onChange={(e) => setFinalVerdict(e.target.value)} rows={4} placeholder="Расскажи максимально подробно, мы с удовольствием прочитаем!" maxLength={6} />
                 </Flex>
+
+                {/* Новое поле для загрузки файлов */}
+                <Divider />
+                <Flex align={"center"}>
+                    <div style={{width: 330}}>Прикрепить файлы</div>
+                    <Upload
+                        customRequest={customRequest}
+                        fileList={fileList}
+                        onChange={handleFileChange}
+                        multiple
+                        listType="picture"
+                        beforeUpload={() => false}
+                        accept="image/*"
+                    >
+                        <Button icon={<UploadOutlined />}>Выбрать файлы</Button>
+                    </Upload>
+                </Flex>
+
                 <Divider />
                 <Flex align={"center"}>
                     <div style={{width: 330}}>Статус</div>

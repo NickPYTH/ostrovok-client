@@ -117,8 +117,8 @@ export const ProfileModal = (props: ModalProps) => {
                     status,
                     tgId,
                     travelInterests,
-                    user
-
+                    user,
+                    userId: user.id ?? 0
                 };
                 if (props.selectedProfile) update({...profile, id: props.selectedProfile.id});
                 else create(profile);

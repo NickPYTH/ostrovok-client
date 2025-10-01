@@ -5,35 +5,35 @@ import {GuestRequestModel} from "entities/GuestRequestModel";
 export const guestRequestAPI = createApi({
     reducerPath: 'guestRequestAPI',
     baseQuery: fetchBaseQuery({
-        baseUrl: `${host}/api/guestRequest`,
+        baseUrl: `${host}/api/guest-requests`,
     }),
     tagTypes: ['guestRequest'],
     endpoints: (build) => ({
         getAll: build.mutation<GuestRequestModel[], void>({
             query: () => ({
-                url: `/getAll`,
+                url: ``,
                 method: 'GET',
             }),
             invalidatesTags: ['guestRequest']
         }),
         get: build.mutation<GuestRequestModel, number>({
             query: (id) => ({
-                url: `/get?id=${id}`,
+                url: `/${id}`,
                 method: 'GET',
             }),
             invalidatesTags: ['guestRequest']
         }),
         update: build.mutation<GuestRequestModel, GuestRequestModel>({
             query: (body) => ({
-                url: `/update`,
-                method: 'POST',
+                url: `/${body.id}`,
+                method: 'PUT',
                 body
             }),
             invalidatesTags: ['guestRequest']
         }),
         create: build.mutation<GuestRequestModel, GuestRequestModel>({
             query: (body) => ({
-                url: `/create`,
+                url: ``,
                 method: 'POST',
                 body
             }),

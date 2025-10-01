@@ -144,7 +144,7 @@ export const InspectionReportModal = (props: ModalProps) => {
                         placeholder={"Выберите заявку тайного гостя"}
                         style={{width: '100%'}}
                         onChange={(e) => setGuestRequestId(e)}
-                        options={guestRequests?.map((gr: GuestRequestModel) => ({value: gr.id, label: `${gr.id} ${gr.guest.username} ${gr.hotelInspectionRequest.hotel.name}`}))}
+                        options={guestRequests?.map((gr: GuestRequestModel) => ({value: gr.id, label: `${gr.guest.lastName} ${gr.guest.firstName} ${gr.guest.patronymic ?? ""} ${gr.hotelInspection?.hotel.name}`}))}
                     />
                 </Flex>
                 <Divider />

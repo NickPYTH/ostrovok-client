@@ -7,7 +7,7 @@ export type HotelModel = {
     action: string;
     address: string;
     //city: CityModel;
-    officialRating: number;
+    officialRating: number | null;
     neesInspection: boolean;
     inspectionReason: string;
     lastInspection: number | null;

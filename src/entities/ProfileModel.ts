@@ -13,4 +13,6 @@ export type ProfileModel = {
     tgId: string;
     status: string;
     rating: number;
+
+    userId?: number
 }

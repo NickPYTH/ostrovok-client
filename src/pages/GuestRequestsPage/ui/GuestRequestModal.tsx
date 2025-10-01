@@ -10,6 +10,8 @@ import {guestRequestAPI} from "service/GuestRequestService";
 import {GuestRequestModel} from "entities/GuestRequestModel";
 import {userAPI} from "service/UserService";
 import {UserModel} from "entities/UserModel";
+import {profileAPI} from "service/ProfileService";
+import {ProfileModel} from "entities/ProfileModel";
 
 type ModalProps = {
     selectedRequest: GuestRequestModel | null,
@@ -25,10 +27,10 @@ export const GuestRequestModal = (props: ModalProps) => {
     // -----
 
     // States
-    const [hotelInspectionRequestId, setHotelInspectionRequestId] = useState<number | null>(null);
+    const [hotelInspectionRequestId, setHotelInspectionRequestId] = useState<number | undefined>(undefined);
     const [guestId, setGuestId] = useState<number | null>(null);
-    const [dateStart, setDateStart] = useState<number | null>(null);
-    const [dateFinish, setDateFinish] = useState<number | null>(null);
+    const [dateStart, setDateStart] = useState(dayjs().format('YYYY-MM-DDTHH:mm:ss'));
+    const [dateFinish, setDateFinish] = useState(dayjs().add(5, 'day').format('YYYY-MM-DDTHH:mm:ss'));
     // -----
 
     // Notifications
@@ -55,20 +57,20 @@ export const GuestRequestModal = (props: ModalProps) => {
         isError: isHotelInspectionRequestsError,
         isLoading: isHotelInspectionRequestsLoading
     }] = hotelInspectionRequestAPI.useGetAllMutation();
-    const [getUsersRequest, {
-        data: users,
-        isError: isUsersError,
-        isLoading: isUsersLoading
-    }] = userAPI.useGetAllMutation();
+    const [getProfilesRequest, {
+        data: profiles,
+        isLoading: isProfilesLoading
+    }] = profileAPI.useGetAllMutation();
     // -----
 
     // Effects
     useEffect(() => {
+        getProfilesRequest();
         getHotelInspectionRequest();
     }, []);
     useEffect(() => {
         if (props.selectedRequest) {
-            setHotelInspectionRequestId(props.selectedRequest.hotelInspectionRequest.id);
+            setHotelInspectionRequestId(props.selectedRequest.hotelInspection?.id);
             setGuestId(props.selectedRequest.guest.id);
             setDateStart(props.selectedRequest.dateStart);
             setDateFinish(props.selectedRequest.dateFinish);
@@ -90,14 +92,18 @@ export const GuestRequestModal = (props: ModalProps) => {
     const confirmHandler = () => {
         if (hotelInspectionRequestId && guestId && dateStart && dateFinish){
             const hotelInspectionRequest:HotelInspectionRequestModel|undefined = hotelInspectionRequests?.find((hr:HotelInspectionRequestModel) => hr.id == hotelInspectionRequestId);
-            const guest:UserModel|undefined = users?.find((g:UserModel) => g.id == guestId);
+            const guest:ProfileModel|undefined = profiles?.find((g:ProfileModel) => g.id == guestId);
+            const dateStartStr = dayjs(dateStart).format('YYYY-MM-DDTHH:mm:ss');
+            const dateFinishStr = dayjs(dateFinish).format('YYYY-MM-DDTHH:mm:ss');
             if (hotelInspectionRequest && guest) {
                 let request: GuestRequestModel = {
                     id: null,
                     guest,
                     hotelInspectionRequest,
-                    dateStart,
-                    dateFinish
+                    dateStart: dateStartStr,
+                    dateFinish: dateFinishStr,
+                    hotelInspectionId: hotelInspectionRequest.id ?? 0,
+                    guestId: guest.id ?? 0,
                 };
                 if (props.selectedRequest) update({...request, id: props.selectedRequest.id});
                 else create(request);
@@ -130,21 +136,21 @@ export const GuestRequestModal = (props: ModalProps) => {
                 <Flex align={"center"}>
                     <div style={{width: 180}}>Секрктный гость</div>
                     <Select
-                        loading={isUsersLoading}
+                        loading={isProfilesLoading}
                         value={guestId}
                         placeholder={"Выберите пользователя"}
                         style={{width: '100%'}}
                         onChange={(e) => setGuestId(e)}
-                        options={users?.map((g: UserModel) => ({value: g.id, label: g.username}))}
+                        options={profiles?.map((g: ProfileModel) => ({value: g.id, label: `${g.lastName} ${g.firstName} ${g.patronymic}`}))}
                     />
                 </Flex>
                 <Flex align={"center"}>
                     <div style={{width: 180}}>Дата заезда</div>
-                    <DatePicker value={dateStart ? dayjs.unix(dateStart) : dayjs()} onChange={date => setDateStart(date.unix)}/>
+                    <DatePicker value={dateStart ? dayjs(dateStart, 'YYYY-MM-DDTHH:mm:ss') : dayjs()} onChange={date => setDateStart(date.format('YYYY-MM-DDTHH:mm:ss'))}/>
                 </Flex>
                 <Flex align={"center"}>
                     <div style={{width: 180}}>Дата выезда</div>
-                    <DatePicker value={dateFinish ? dayjs.unix(dateFinish) : dayjs()} onChange={date => setDateFinish(date.unix)}/>
+                    <DatePicker value={dateFinish ? dayjs(dateFinish, 'YYYY-MM-DDTHH:mm:ss') : dayjs()} onChange={date => setDateFinish(date.format('YYYY-MM-DDTHH:mm:ss'))}/>
                 </Flex>
             </Flex>
         </Modal>

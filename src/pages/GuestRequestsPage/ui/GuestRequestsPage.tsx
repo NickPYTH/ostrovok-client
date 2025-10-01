@@ -63,25 +63,25 @@ const GuestRequestsPage: React.FC = () => {
             title: 'Инспектируемый отель',
             dataIndex: 'hotelInspectionRequest',
             key: 'hotelInspectionRequest',
-            render: (_, record) => (<div>{record.hotelInspectionRequest.hotel.name}</div>),
+            render: (_, record) => (<div>{record.hotelInspection?.hotel?.name}</div>),
         },
         {
             title: 'Секретный гость',
             dataIndex: 'guest',
             key: 'guest',
-            render: (_, record) => (<div>{record.guest.username}</div>),
+            render: (_, record) => (<div>{record.guest.user.username}</div>),
         },
         {
             title: 'Дата заезда',
             dataIndex: 'dateStart',
             key: 'dateStart',
-            render: (_, record) => (<div>{dayjs.unix(record.dateStart)}</div>),
+            render: (_, record) => (<div>{record.dateStart ? dayjs(record.dateStart, 'YYYY-MM-DDTHH:mm:ss').format("DD.MM.YYYY") : ""}</div>),
         },
         {
             title: 'Дата выезда',
             dataIndex: 'dateFinish',
             key: 'dateFinish',
-            render: (_, record) => (<div>{dayjs.unix(record.dateFinish)}</div>),
+            render: (_, record) => (<div>{record.dateFinish ? dayjs(record.dateFinish, 'YYYY-MM-DDTHH:mm:ss').format("DD.MM.YYYY") : ""}</div>),
         },
     ]
     // -----

@@ -71,7 +71,7 @@ export const HotelModal = (props: ModalProps) => {
             setAction(props.selectedHotel.action);
             setAddress(props.selectedHotel.address);
             //setCityId(props.selectedHotel.city.id);
-            setOfficialRating(props.selectedHotel.officialRating);
+            setOfficialRating(props.selectedHotel.officialRating ?? 0);
             setNeedsInspection(props.selectedHotel.neesInspection);
             setLastInspection(props.selectedHotel.lastInspection);
             setSecretGreetAvgTail(props.selectedHotel.secretGreetAvgTail);

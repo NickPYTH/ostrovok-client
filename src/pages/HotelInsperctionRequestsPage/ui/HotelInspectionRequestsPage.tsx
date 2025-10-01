@@ -69,7 +69,7 @@ const HotelInspectionRequestsPage: React.FC = () => {
             title: 'Дата начала',
             dataIndex: 'startDate',
             key: 'startDate',
-            render: (_, record) => (<div>{dayjs.unix(record.startDate)}</div>),
+            render: (_, record) => (<div>{record.startDate ? dayjs(record.startDate, 'YYYY-MM-DDTHH:mm:ss').format("DD.MM.YYYY") : ""}</div>),
         },
         {
             title: 'Статус',

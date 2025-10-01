@@ -111,13 +111,21 @@ const HotelPage: React.FC = () => {
             dataIndex: 'officialRating',
             key: 'officialRating',
             filters: data?.reduce((acc: { text: string, value: string }[], hotel: HotelModel) => {
-                if (acc.find((g: { text: string, value: string }) => g.text === hotel.officialRating.toString()) === undefined)
-                    return acc.concat({text: hotel.officialRating.toString(), value: hotel.officialRating.toString()});
+                if (hotel.officialRating != null) {
+                    if (acc.find((g: {
+                        text: string,
+                        value: string
+                    }) => g.text === hotel.officialRating?.toString()) === undefined)
+                        return acc.concat({
+                            text: hotel.officialRating.toString(),
+                            value: hotel.officialRating.toString()
+                        });
+                }
                 return acc;
             }, []),
             filterSearch: true,
             onFilter: (value: any, record: HotelModel) => {
-                return record.officialRating.toString().indexOf(value) === 0
+                return record.officialRating?.toString().indexOf(value) === 0
             },
         },
     ]

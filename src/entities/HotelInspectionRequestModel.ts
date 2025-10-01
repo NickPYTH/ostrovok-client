@@ -1,9 +1,9 @@
 import {HotelModel} from "entities/HotelModel";
 
 export type HotelInspectionRequestModel = {
-    id: number | null;
+    id?: number;
     hotel: HotelModel;
-    startDate: number;
+    startDate: string;
     status: string;
     creator: string;
     description: string;

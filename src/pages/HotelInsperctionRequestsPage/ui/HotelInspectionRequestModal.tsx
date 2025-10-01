@@ -24,7 +24,7 @@ export const HotelInspectionRequestModal = (props: ModalProps) => {
 
     // States
     const [hotelId, setHotelId] = useState<number | null>(null);
-    const [startDate, setStartDate] = useState<number | null>(null);
+    const [startDate, setStartDate] = useState(dayjs().format('YYYY-MM-DDTHH:mm:ss'));
     const [status, setStatus] = useState("");
     const [creator, setCreator] = useState("");
     const [description, setDescription] = useState("");
@@ -89,15 +89,15 @@ export const HotelInspectionRequestModal = (props: ModalProps) => {
     // Handlers
     const confirmHandler = () => {
         if (hotelId && startDate){
+            const date = dayjs(startDate).format('YYYY-MM-DDTHH:mm:ss');
             const hotel:HotelModel|undefined = hotels?.find((h:HotelModel) => h.id == hotelId);
             if (hotel) {
                 let request: HotelInspectionRequestModel = {
                     creator,
                     description,
                     hotel,
-                    id: null,
                     sessionCount,
-                    startDate,
+                    startDate: date,
                     status: ""
                 };
                 if (props.selectedRequest) update({...request, id: props.selectedRequest.id});
@@ -108,7 +108,7 @@ export const HotelInspectionRequestModal = (props: ModalProps) => {
     // -----
 
     return (
-        <Modal title={props.selectedRequest ? "Редактирование отеля" : "Создание отеля"}
+        <Modal title={props.selectedRequest ? "Редактирование потребности в инспекциии" : "Создание потребности в инспекции"}
                open={props.visible}
                loading={(isCreateLoading || isUpdateLoading)}
                onOk={confirmHandler}
@@ -130,7 +130,7 @@ export const HotelInspectionRequestModal = (props: ModalProps) => {
                 </Flex>
                 <Flex align={"center"}>
                     <div style={{width: 180}}>Дата начала</div>
-                    <DatePicker value={startDate ? dayjs.unix(startDate) : dayjs()} onChange={date => setStartDate(date.unix)}/>
+                    <DatePicker value={startDate ? dayjs(startDate, 'YYYY-MM-DDTHH:mm:ss') : dayjs()} onChange={date => setStartDate(date.format('YYYY-MM-DDTHH:mm:ss'))}/>
                 </Flex>
                 <Flex align={"center"}>
                     <div style={{width: 180}}>Статус</div>

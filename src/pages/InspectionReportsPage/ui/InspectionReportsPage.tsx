@@ -12,6 +12,7 @@ const InspectionReportsPage: React.FC = () => {
 
     // Store
     const notificationAPI = useSelector((state: RootStateType) => state.currentUser.notificationContextApi);
+    const currentUser = useSelector((state: RootStateType) => state.currentUser.user);
     // -----
 
     // States
@@ -114,7 +115,11 @@ const InspectionReportsPage: React.FC = () => {
                 bordered
                 style={{width: '100vw'}}
                 columns={columns}
-                dataSource={data}
+                dataSource={currentUser?.role == "ROLE_USER" ?
+                    data?.filter((report:InspectionReportModel) => report.guestRequest.guest.user.username == currentUser?.username)
+                    :
+                    data
+                }
                 loading={isDataLoading}
                 pagination={{
                     defaultPageSize: 100,

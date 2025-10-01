@@ -98,7 +98,11 @@ const GuestRequestsPage: React.FC = () => {
                 bordered
                 style={{width: '100vw'}}
                 columns={columns}
-                dataSource={data?.filter((request:GuestRequestModel) => request.guest.user.username == currentUser?.username)}
+                dataSource={currentUser?.role == "ROLE_USER" ?
+                    data?.filter((request:GuestRequestModel) => request.guest.user.username == currentUser?.username)
+                    :
+                    data
+                }
                 loading={isDataLoading}
                 pagination={{
                     defaultPageSize: 100,

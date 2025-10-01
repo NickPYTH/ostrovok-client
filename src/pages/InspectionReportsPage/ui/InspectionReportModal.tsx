@@ -135,7 +135,7 @@ export const InspectionReportModal = (props: ModalProps) => {
                onOk={confirmHandler}
                onCancel={() => props.setVisible(false)}
                okText={props.inspectionReport ? "Сохранить" : "Создать"}
-               width={'650px'}
+               width={'700px'}
         >
             <Flex gap={'small'} vertical={true}>
                 <Flex align={"center"}>
@@ -146,7 +146,11 @@ export const InspectionReportModal = (props: ModalProps) => {
                         placeholder={"Выберите заявку тайного гостя"}
                         style={{width: '100%'}}
                         onChange={(e) => setGuestRequestId(e)}
-                        options={guestRequests?.map((gr: GuestRequestModel) => ({value: gr.id, label: `${gr.guest.lastName} ${gr.guest.firstName} ${gr.guest.patronymic ?? ""} ${gr.hotelInspection?.hotel.name}`}))}
+                        options={currentUser?.role == "ROLE_USER" ?
+                            guestRequests?.filter((gr: GuestRequestModel) => gr.guest.user.username == currentUser.username).map((gr: GuestRequestModel) => ({value: gr.id, label: `${gr.guest.lastName} ${gr.guest.firstName} ${gr.guest.patronymic ?? ""} - ${gr.hotelInspection?.hotel.name}`}))
+                            :
+                            guestRequests?.map((gr: GuestRequestModel) => ({value: gr.id, label: `${gr.guest.lastName} ${gr.guest.firstName} ${gr.guest.patronymic ?? ""} ${gr.hotelInspection?.hotel.name}`}))
+                        }
                     />
                 </Flex>
                 <Divider />
@@ -198,7 +202,7 @@ export const InspectionReportModal = (props: ModalProps) => {
                         placeholder={"Выберите статус"}
                         style={{width: '100%'}}
                         onChange={(e) => setStatus(e)}
-                        options={[{value: REPORT_STATUSES.ON_MISSION, label:"Тайный гость на миссии"},
+                        options={[
                             {value: REPORT_STATUSES.REPORT_SENT, label:"Отчет отправлен"},
                             {value: REPORT_STATUSES.CONFIRMED, label:"Обработано"},
                         ]}

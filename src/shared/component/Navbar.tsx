@@ -97,7 +97,6 @@ export const Navbar = () => {
     }, [refreshTokenIsError]);
     useEffect(() => {
         if (verifyTokenData){
-            console.log(verifyTokenData);
             let user: UserModel = {
                 email: "", id: null, password: "123", role: verifyTokenData.role, username: verifyTokenData.username
 
@@ -174,6 +173,10 @@ export const Navbar = () => {
             {
                 label: 'Ваши заявки на инспекцию',
                 key: 'guestRequests',
+            },
+            {
+                label: 'Ваши отчеты',
+                key: 'inspectionReports',
             },
             {
                 label: 'Выйти',

@@ -186,7 +186,7 @@ export const Navbar = () => {
         ];
     // -----
 
-    if (window.location.pathname.indexOf('login') == -1) return (
+    if (window.location.pathname.indexOf('login') == -1 && window.location.pathname.indexOf('registration') == -1) return (
         <Menu onClick={onClick} selectedKeys={[currentMenuItem]} mode="horizontal" items={items} style={{marginBottom: 20}}/>
     );
     return (<></>)

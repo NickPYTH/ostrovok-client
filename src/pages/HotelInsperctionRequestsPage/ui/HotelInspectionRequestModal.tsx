@@ -8,6 +8,7 @@ import {HotelModel} from "entities/HotelModel";
 import {HotelInspectionRequestModel} from "entities/HotelInspectionRequestModel";
 import {hotelInspectionRequestAPI} from "service/HotelInspectionRequestService";
 import {hotelAPI} from "service/HotelService";
+import {HOTEL_INSPECTION_STATUSES} from "shared/config/constants";
 
 type ModalProps = {
     selectedRequest: HotelInspectionRequestModel | null,
@@ -88,6 +89,10 @@ export const HotelInspectionRequestModal = (props: ModalProps) => {
 
     // Handlers
     const confirmHandler = () => {
+        if (currentUser?.role == "ROLE_USER"){
+            showErrorNotification("topRight", "Недостаточно полномочий");
+            return;
+        }
         if (hotelId && startDate){
             const date = dayjs(startDate).format('YYYY-MM-DDTHH:mm:ss');
             const hotel:HotelModel|undefined = hotels?.find((h:HotelModel) => h.id == hotelId);
@@ -134,8 +139,14 @@ export const HotelInspectionRequestModal = (props: ModalProps) => {
                 </Flex>
                 <Flex align={"center"}>
                     <div style={{width: 180}}>Статус</div>
-                    <Input value={status} onChange={(e) => setStatus(e.target.value)}/>
-                </Flex>
+                    <Select
+                        value={status}
+                        placeholder={"Выберите отель"}
+                        style={{width: '100%'}}
+                        onChange={(e) => setStatus(e)}
+                        options={[{value: HOTEL_INSPECTION_STATUSES.OPEN, label:"Открыта"},
+                            {value: HOTEL_INSPECTION_STATUSES.CLOSE, label:"Закрыта"}]}
+                    />                </Flex>
                 <Flex align={"center"}>
                     <div style={{width: 180}}>Создатель</div>
                     <Input value={creator} onChange={(e) => setCreator(e.target.value)}/>

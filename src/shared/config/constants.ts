@@ -25,3 +25,8 @@ export const PROFILE_STATUSES = {
     CONFIRMED: "CONFIRMED",
     CANCELED: "CANCELED"
 }
+
+export const HOTEL_INSPECTION_STATUSES = {
+    OPEN: "OPEN",
+    CLOSE: "CLOSE",
+}

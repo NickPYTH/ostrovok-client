@@ -8,6 +8,7 @@ import HotelInspectionRequestsPage from "pages/HotelInsperctionRequestsPage/ui/H
 import GuestRequestsPage from "pages/GuestRequestsPage/ui/GuestRequestsPage";
 import InspectionReportsPage from "pages/InspectionReportsPage/ui/InspectionReportsPage";
 import {LoginPage} from "pages/LoginPage";
+import {RegistrationPage} from "pages/RegistrationPage";
 
 export enum AppRoutes {
     USERS = 'USERS',
@@ -18,6 +19,7 @@ export enum AppRoutes {
     INSPECTION_REPORTS = 'INSPECTION_REPORTS',
     ANALYTIC = 'ANALYTIC',
     LOGIN = 'LOGIN',
+    REGISTRATION = 'REGISTRATION',
 }
 
 export const RoutePath: Record<AppRoutes, string> = {
@@ -29,6 +31,7 @@ export const RoutePath: Record<AppRoutes, string> = {
     [AppRoutes.INSPECTION_REPORTS]: '/inspectionReports',
     [AppRoutes.ANALYTIC]: '/analytic',
     [AppRoutes.LOGIN]: '/login',
+    [AppRoutes.REGISTRATION]: '/registration',
 }
 
 export const routeConfig: Record<AppRoutes, RouteProps> = {
@@ -63,5 +66,9 @@ export const routeConfig: Record<AppRoutes, RouteProps> = {
     [AppRoutes.LOGIN]: {
         path: RoutePath.LOGIN,
         element: <LoginPage/>
+    },
+    [AppRoutes.REGISTRATION]: {
+        path: RoutePath.REGISTRATION,
+        element: <RegistrationPage/>
     },
 }

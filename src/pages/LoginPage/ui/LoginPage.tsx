@@ -1,6 +1,6 @@
 import {Button, Flex, Input, NotificationArgsProps, Space} from "antd";
 import React, {useEffect, useState} from "react";
-import {GetTokenResponseType, authAPI} from "service/AuthService";
+import {authAPI, GetTokenResponseType} from "service/AuthService";
 import {useDispatch, useSelector} from "react-redux";
 import {RootStateType} from "store/store";
 import {useNavigate} from "react-router-dom";
@@ -65,6 +65,9 @@ const LoginPage = () => {
         }
         getTokens({username, password});
     }
+    const registrationHandler = () => {
+        navigate('/registration');
+    }
     // -----
 
     // Effects
@@ -122,6 +125,7 @@ const LoginPage = () => {
                     <Input.Password style={{width: 200}} value={password ?? ""} onChange={(e) => setPassword(e.target.value)}/>
                 </Flex>
                 <Button onClick={loginHandler} type={'primary'} style={{width: 130}}>Войти</Button>
+                <Button onClick={registrationHandler} type={'link'} style={{width: 130}}>Зарегистрироваться</Button>
             </Space>
         </Flex>
     )
